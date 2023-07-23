@@ -1,8 +1,7 @@
 <template>
     <div class="city_card" @click="goToCity">
         <h2 class="city_name">{{ props.city.name }}</h2>
-        <!-- <p class="temperature">{{ props.temperature }} °C</p> -->
-        <button class="delete_button" @click="deleteCity">Удалить</button>
+        <button class="delete_button" @click.stop="deleteCity">Удалить</button>
     </div>
 </template>
   
