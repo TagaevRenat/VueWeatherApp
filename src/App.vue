@@ -1,8 +1,17 @@
 <template>
-    <main>
-        <RouterView class='page' />
-    </main>
+    <div class="app">
+        <RouterView />
+    </div>
 </template>
 <script setup lang="ts">
 </script>
-<style ></style>
+<style>
+.app {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+</style>

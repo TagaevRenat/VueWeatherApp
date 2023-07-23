@@ -1,41 +1,54 @@
 <template>
-    <div class="container">
-        <h4 id="temp">{{ WeatherStatus[convertedCurrentWeather?.weathercode ?? 0] }}</h4>
-        <img :src="iconPath" alt="" id="weatherIcon">
-        <h1 id="title">{{ city.name }}</h1>
-        <h2 id="temp">{{ convertedCurrentWeather?.temperature_2m }} °C </h2>
-        <!-- <h4>Скорость ветра {{ convertedCurrentWeather?.wind_speed }}</h4> -->
-        <!-- <br>
-        <h4>{{ weatherForecast }}</h4>
-        <button>
-            <router-link to="/">Go to Home</router-link>
-        </button> -->
-    </div>
+    <main class="main" v-if="!isLoading">
+        <div class="weather-info">
+            <div class="weather-info__summary">{{ WeatherStatus[convertedCurrentWeather?.weathercode ?? 0] }}</div>
+            <img :src="iconPath(convertedCurrentWeather?.weathercode)" alt="weather icon" class="weather-info__icon">
+            <h2 class="weather-info__city">{{ city.name }}</h2>
+            <h2 class="weather-info__temp">{{ convertedCurrentWeather?.temperature_2m }} °C</h2>
+            <p class="weather-info__wind">Скорость ветра: {{ convertedCurrentWeather?.wind_speed }} м/с</p>
+        </div>
+        <table class="forecast-table">
+            <tr>
+                <td class="forecast-table__date">Дата</td>
+                <td class="forecast-table__icon">Погода</td>
+                <td class="forecast-table__temperature">Мин / Макс</td>
+            </tr>
+            <tr v-for="day in  weatherForecast " :key="day.data">
+                <td class="forecast-table__date">{{ day.data }}</td>
+                <td class="forecast-table__icon">
+                    <img :src="iconPath(day.weathercode)" alt="weather icon" class="forecast-table__icon-img" />
+                </td>
+                <td class="forecast-table__temperature">{{ day.temperature_2m_min }}° / {{ day.temperature_2m_max }}°</td>
+            </tr>
+        </table>
+        <div class="weather-info__button">
+            <button class="back-button">
+                <router-link to="/">К выбору города</router-link>
+            </button>
+        </div>
+    </main>
+    <main class="main-loader" v-else>
+        <div class="lds-dual-ring"></div>
+    </main>
 </template>
 <script setup lang="ts">
 import { WeatherStatus } from '@/components/weatherStatus';
 import { WeatherStatusIcons } from '@/components/weatherStatusIcon';
 import { ApiService } from '@/services/ApiService';
 import { ForecastConverter, type CurrentWeather, type ConvertedForecast } from '@/services/ForecastConverter';
+import { IconPathSetter } from '@/services/IconPathSetter';
 import { useCityStore } from '@/store/cityStore';
-import { computed, onBeforeMount, ref, type Ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onBeforeMount, ref, type Ref } from 'vue';
 
 const apiService = new ApiService()
 const forecastConverter = new ForecastConverter()
-const router = useRouter();
+const iconPathSetter = new IconPathSetter()
+const isLoading = ref(true)
 const cityStore = useCityStore()
 const forecastRange = 3
 const currentHour = new Date().getHours()
 const dayNight = currentHour > 6 && currentHour < 18 ? 0 : 1
-
-const iconPath = computed(() => {
-    const path = WeatherStatusIcons[convertedCurrentWeather.value?.weathercode ?? 0]
-    if (Array.isArray(path)) return '/src/assets/icons/' + path[dayNight]
-    else {
-        return '/src/assets/icons/' + path
-    }
-})
+const iconPath = (weatherCode: number) => iconPathSetter.setIconPath(weatherCode, dayNight)
 
 const city = cityStore.getSelectedCity()
 const weatherForecast: Ref<ConvertedForecast[]> = ref([])
@@ -45,6 +58,7 @@ const loadWeatherData = async (): Promise<void> => {
     if (weatherForecastResponse) {
         convertedCurrentWeather.value = forecastConverter.getCurrentWeather(weatherForecastResponse)
         weatherForecast.value = forecastConverter.convertForecast(weatherForecastResponse, forecastRange)
+        isLoading.value = false
     }
 }
 
@@ -53,18 +67,93 @@ onBeforeMount(async () => {
 })
 </script>
 <style scoped>
-#weatherIcon {
+.main {
+    padding: 20px;
+    width: 430px;
+    height: 100vh;
+    justify-content: center;
+}
+
+.main-loader {
+    height: 100vh;
+    width: 430px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.weather-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.weather-info__icon {
+    background-color: #f2f2f2;
     width: 200px;
     height: 200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#title {
-    font-weight: bold;
-    font-size: 30px
+.weather-info__city {
+    font-size: 24px;
+    margin: 10px 0;
 }
 
-#temp {
-    font-weight: bold;
-    font-size: 40px
+.weather-info__temp {
+    font-size: 30px;
+    margin: 10px 0;
+}
+
+.weather-info__wind {
+    font-size: 16px;
+    margin: 0;
+}
+
+.weather-info__button {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.forecast-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.forecast-table__icon {
+    width: 40px;
+    height: 40px;
+    background-color: #f2f2f2;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.forecast-table__date,
+.forecast-table__temperature {
+    font-size: 16px;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.back-button {
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #6495ED;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.back-button:hover {
+    background-color: #256aea;
 }
 </style>
