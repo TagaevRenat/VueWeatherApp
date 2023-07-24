@@ -1,0 +1,1 @@
+export const loadError = 'Ошибка при загрузке данных!'

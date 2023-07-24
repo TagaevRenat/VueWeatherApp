@@ -11,7 +11,7 @@ export const useCityStore = defineStore({
         this.selectedCity = city
     },
     getSelectedCity(){
-      return this.selectedCity
+      return this.selectedCity ?? null
     }
   }
 })

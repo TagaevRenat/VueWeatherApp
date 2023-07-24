@@ -1,46 +1,5 @@
 import axios from 'axios'
 
-export class ApiService {
-  
-    private baseGeonameURL = 'http://api.geonames.org'
-    private apiUser = 'renattagaev'
-
-
-    public async getWeatherForecast(city: UserCity): Promise<WeatherForecastResponse | undefined>{
-        const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${city.coord.lat}&longitude=${city.coord.lon}&hourly=temperature_2m,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&models=icon_seamless`
-        try {
-        const response = await axios({
-            method: 'GET',
-            url: endpoint,
-        })
-        if(response.status === 200 && response.data){
-            return response.data as WeatherForecastResponse
-        }else{
-            throw new Error('Ошибка при загрузке погоды!')
-        }
-         } catch (error) {
-        console.error(error)
-        }
-    }
-
-    public async getCityInfo(query: string): Promise<CitySearchResult | undefined>{
-        const endpoint = `${this.baseGeonameURL}/searchJSON?q=${query}&maxRows=3&lang=ru&username=${this.apiUser}`
-        try {
-            const response = await axios({
-                method: 'GET',
-                url: endpoint
-            })
-            if(response.status === 200 && response.data){
-                return response.data as CitySearchResult
-            }else{
-                throw new Error('Ошибка загрузки поиска города!')
-            }
-            } catch (error) {
-            console.error(error)
-            }
-    }
-}
-
 export interface CitySearchResult {
     totalResultsCount: number,
     geonames: Geonames[]
@@ -102,4 +61,45 @@ export interface WeatherForecastResponse {
       temperature_2m_max: number[];
       temperature_2m_min: number[];
     };
+}
+
+export class ApiService {
+  
+    private baseGeonameURL = 'http://api.geonames.org'
+    private apiUser = 'renattagaev'
+
+
+    public async getWeatherForecast(city: UserCity): Promise<WeatherForecastResponse | undefined>{
+        const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${city.coord.lat}&longitude=${city.coord.lon}&hourly=temperature_2m,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&models=icon_seamless`
+        try {
+        const response = await axios({
+            method: 'GET',
+            url: endpoint,
+        })
+        if(response.status === 200 && response.data){
+            return response.data as WeatherForecastResponse
+        }else{
+            throw new Error('Ошибка при загрузке погоды!')
+        }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    public async getCityInfo(query: string): Promise<CitySearchResult | undefined>{
+        const endpoint = `${this.baseGeonameURL}/searchJSON?q=${query}&maxRows=3&lang=ru&username=${this.apiUser}`
+        try {
+            const response = await axios({
+                method: 'GET',
+                url: endpoint
+            })
+            if(response.status === 200 && response.data){
+                return response.data as CitySearchResult
+            }else{
+                throw new Error('Ошибка загрузки поиска города!')
+            }
+            } catch (error) {
+            console.error(error)
+            }
+    }
 }

@@ -5,10 +5,9 @@
 </template>
 <script setup lang="ts">
 </script>
-<style>
+<style scoped>
 .app {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
     color: #333;
     padding: 20px;
     display: flex;

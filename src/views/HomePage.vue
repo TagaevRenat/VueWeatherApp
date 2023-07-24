@@ -1,5 +1,9 @@
 <template>
     <main class="main">
+        <header class="main-header">
+            <h1 class="main-header__title">Weather app</h1>
+            <img src="../assets//icons/weather.svg" alt="weather icon" class="main-header__icon">
+        </header>
         <SearchBar @citySelected="addCity" />
         <section class="cities">
             <h2 class="cities__title" v-if="selectedCities.length === 0">Нет выбранных городов!</h2>
@@ -10,35 +14,57 @@
     </main>
 </template>
 <script setup lang="ts">
-import SearchBar from '@/components/UI/SearchBar.vue';
-import CityListCard from '@/components/UI/CityListCard.vue'
+import SearchBar from '@/components/SearchBar.vue';
+import CityListCard from '@/components/CityListCard.vue'
 import { onBeforeMount, ref, type Ref } from 'vue';
+import { Helpers } from '@/services/Helpers';
 import type { UserCity } from '@/services/ApiService';
-const selectedCities: Ref<UserCity[]> = ref([])
 
+const selectedCities: Ref<UserCity[]> = ref([])
+const helpers = new Helpers()
 
 const addCity = (city: UserCity): void => {
     if (selectedCities.value.find(el => el.name === city.name)) return
     selectedCities.value.push(city)
+    helpers.saveCities(selectedCities.value)
 }
 
 const deleteCity = (city: string): void => {
     selectedCities.value = selectedCities.value.filter(el => el.name !== city)
+    helpers.saveCities(selectedCities.value)
 }
 
 onBeforeMount(() => {
-    selectedCities.value = JSON.parse(localStorage.getItem('cities') ?? '')
+    selectedCities.value = helpers.getCities()
 })
-
-window.addEventListener('beforeunload', () => {
-    localStorage.setItem('cities', JSON.stringify(selectedCities.value))
-});
 </script>
-<style>
+<style scoped>
 .main {
+    display: flex;
+    align-items: center;
     padding: 20px;
     flex-direction: column;
     height: 100vh;
+    background: linear-gradient(to bottom, #ffffff, #83cfff);
+    width: 430px;
+}
+
+.main-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.main-header__title {
+    font-size: 20px;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.main-header__icon {
+    height: 200px;
+    width: 200px;
 }
 
 .cities__title {

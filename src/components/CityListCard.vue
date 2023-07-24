@@ -1,7 +1,7 @@
 <template>
     <div class="city_card" @click="goToCity">
         <h2 class="city_name">{{ props.city.name }}</h2>
-        <button class="delete_button" @click.stop="deleteCity">Удалить</button>
+        <button class="delete_button" @click.stop="deleteCity">x</button>
     </div>
 </template>
   
@@ -9,7 +9,7 @@
 import type { UserCity } from '@/services/ApiService';
 import type { PropType } from 'vue';
 import { useRouter } from 'vue-router';
-import { useCityStore } from './../../store/cityStore'
+import { useCityStore } from '@/store/cityStore'
 
 const router = useRouter();
 const cityStore = useCityStore()

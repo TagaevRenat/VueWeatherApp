@@ -1,3 +1,7 @@
 :root {
+  /* Colors */
   --main-bg-color: #ffffff;
+
+  /* Sizes */
+  --container-width: 430px;
 }
