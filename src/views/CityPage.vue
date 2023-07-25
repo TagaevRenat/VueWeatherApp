@@ -4,7 +4,7 @@
             <div v-if="!error" class="weather-info__summary">
                 {{ WeatherStatus[convertedCurrentWeather?.weathercode ?? 0] }}
             </div>
-            <img v-if="!error" :src="iconPath(convertedCurrentWeather?.weathercode)" alt="weather icon"
+            <img v-if="!error" :src="iconPath(convertedCurrentWeather?.weathercode ?? 1)" alt="weather icon"
                 class="weather-info__icon" />
             <h2 class="weather-info__city">{{ city.name }}</h2>
             <h2 class="weather-info__temp">{{ convertedCurrentWeather?.temperature_2m }} °C</h2>
