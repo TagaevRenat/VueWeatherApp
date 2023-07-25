@@ -67,6 +67,11 @@ onBeforeMount(() => {
     width: 200px;
 }
 
+.cities {
+    overflow: auto;
+    padding: 10px;
+}
+
 .cities__title {
     font-size: 16px;
     margin-top: 10px

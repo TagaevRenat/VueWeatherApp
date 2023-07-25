@@ -10,7 +10,7 @@
   
 <script setup lang="ts">
 import { ref, onMounted, type PropType } from 'vue';
-import { PopupColor } from './popup-color.enum';
+import { PopupColor } from '@/constants/popup-color.enum';
 
 const props = defineProps({
     color: {

@@ -4,7 +4,7 @@ import './assets/global-variables.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import City from './views/City.vue'
+import City from './views/CityPage.vue'
 import HomePage from './views/HomePage.vue'
 import { createRouter, createWebHistory, type Router, type RouteRecordRaw } from 'vue-router'
 import { createPinia } from 'pinia'

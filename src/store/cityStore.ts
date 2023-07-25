@@ -4,13 +4,13 @@ import { defineStore } from 'pinia'
 export const useCityStore = defineStore({
   id: 'cityStore',
   state: () => ({
-   selectedCity: <UserCity>{} 
+    selectedCity: <UserCity>{}
   }),
   actions: {
-    setSelectedCity(city: UserCity){
-        this.selectedCity = city
+    setSelectedCity(city: UserCity) {
+      this.selectedCity = city
     },
-    getSelectedCity(){
+    getSelectedCity() {
       return this.selectedCity ?? null
     }
   }
