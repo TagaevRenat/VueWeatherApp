@@ -65,7 +65,7 @@ export interface WeatherForecastResponse {
 
 export class ApiService {
   private baseGeonameURL = 'http://api.geonames.org'
-  private apiUser = 'renattagaev'
+  private apiUser = import.meta.env.VITE_API_USER
 
   public async getWeatherForecast(city: UserCity): Promise<WeatherForecastResponse | undefined> {
     const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${city.coord.lat}&longitude=${city.coord.lon}&hourly=temperature_2m,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&models=icon_seamless`
