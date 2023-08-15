@@ -1,7 +1,7 @@
 <template>
     <teleport to="body">
-        <div v-if="show" class="popup-container">
-            <div class="popup" :style="{ backgroundColor: props.color }">
+        <div v-if="show" class="notice-container">
+            <div class="notice" :style="{ backgroundColor: props.color }">
                 {{ text }}
             </div>
         </div>
@@ -10,11 +10,11 @@
   
 <script setup lang="ts">
 import { ref, onMounted, type PropType } from 'vue';
-import { PopupColor } from '@/constants/popup-color.enum';
+import { NoticeColor } from '@/constants/notice-color.enum';
 
 const props = defineProps({
     color: {
-        type: Object as PropType<PopupColor>,
+        type: Object as PropType<NoticeColor>,
         required: true
     },
     text: {
@@ -39,7 +39,7 @@ onMounted(() => {
 </script>
   
 <style scoped>
-.popup-container {
+.notice-container {
     position: fixed;
     top: 100px;
     display: flex;
@@ -49,7 +49,7 @@ onMounted(() => {
     z-index: 9999;
 }
 
-.popup {
+.notice {
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 8px;

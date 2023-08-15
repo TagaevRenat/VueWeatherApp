@@ -10,11 +10,11 @@
             </li>
         </ul>
     </section>
-    <Popup v-if="error" :color="PopupColor.red" :timeout="5000" :text="loadError" />
+    <Notice v-if="error" :color="NoticeColor.red" :timeout="5000" :text="loadError" />
 </template>
 <script setup lang="ts">
-import Popup from '@/components/UI/Popup.vue';
-import { PopupColor } from '@/constants/popup-color.enum';
+import Notice from '@/components/UI/Notice.vue';
+import { NoticeColor } from '@/constants/notice-color.enum';
 import { ApiService, type CitySearchResult, type Geonames, type UserCity } from '@/services/ApiService';
 import { Helpers } from '@/services/Helpers';
 import { ref, type Ref } from 'vue';

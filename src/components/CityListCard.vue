@@ -8,21 +8,9 @@
 <script setup lang="ts">
 import type { UserCity } from '@/services/ApiService';
 import type { PropType } from 'vue';
-import { useRouter } from 'vue-router';
-import { useCityStore } from '@/store/cityStore'
 
-const router = useRouter();
-const cityStore = useCityStore()
-const emit = defineEmits(['deleteCity'])
+const emit = defineEmits(['deleteCity', 'goToCity'])
 
-const goToCity = (): void => {
-    setCityToState(props.city)
-    router.push({ name: "City" })
-}
-
-const setCityToState = (city: UserCity): void => {
-    cityStore.setSelectedCity(city)
-}
 
 const props = defineProps({
     city: {
@@ -31,6 +19,9 @@ const props = defineProps({
     }
 })
 
+const goToCity = (): void => {
+    emit('goToCity', props.city)
+}
 const deleteCity = (): void => {
     emit('deleteCity', props.city.name)
 }

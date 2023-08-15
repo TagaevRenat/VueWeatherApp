@@ -2,13 +2,13 @@
     <main class="main">
         <header class="main-header">
             <h1 class="main-header__title">Weather app</h1>
-            <img src="../assets//icons/weather.svg" alt="weather icon" class="main-header__icon">
+            <img src="../assets//icons/day.svg" alt="weather icon" class="main-header__icon">
         </header>
         <SearchBar @citySelected="addCity" />
         <section class="cities">
             <h2 class="cities__title" v-if="selectedCities.length === 0">Нет выбранных городов!</h2>
             <div class="cities__list" v-for="city in selectedCities" :key="city.name">
-                <CityListCard :city="city" @deleteCity="deleteCity" />
+                <CityListCard :city="city" @deleteCity="deleteCity" @goToCity="goToCity" />
             </div>
         </section>
     </main>
@@ -18,15 +18,28 @@ import SearchBar from '@/components/SearchBar.vue';
 import CityListCard from '@/components/CityListCard.vue'
 import { onBeforeMount, ref, type Ref } from 'vue';
 import { Helpers } from '@/services/Helpers';
+import { useRouter } from 'vue-router';
+import { useCityStore } from '@/store/cityStore'
 import type { UserCity } from '@/services/ApiService';
 
 const selectedCities: Ref<UserCity[]> = ref([])
 const helpers = new Helpers()
+const router = useRouter();
+const cityStore = useCityStore()
 
 const addCity = (city: UserCity): void => {
     if (selectedCities.value.find(el => el.name === city.name)) return
     selectedCities.value.push(city)
     helpers.saveCities(selectedCities.value)
+}
+
+const setCityToState = (city: UserCity): void => {
+    cityStore.setSelectedCity(city)
+}
+
+const goToCity = (city: UserCity): void => {
+    setCityToState(city)
+    router.push({ name: "City" })
 }
 
 const deleteCity = (city: string): void => {

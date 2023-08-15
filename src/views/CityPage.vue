@@ -35,11 +35,11 @@
     <main class="main-loader" v-if="!error && isLoading">
         <div class="lds-dual-ring"></div>
     </main>
-    <Popup v-if="error && !isLoading" :color="PopupColor.red" :timeout="5000" :text="loadError" />
+    <Notice v-if="error && !isLoading" :color="NoticeColor.red" :timeout="5000" :text="loadError" />
 </template>
 <script setup lang="ts">
-import Popup from '@/components/UI/Popup.vue'
-import { PopupColor } from '@/constants/popup-color.enum'
+import Notice from '@/components/UI/Notice.vue'
+import { NoticeColor } from '@/constants/notice-color.enum'
 import { WeatherStatus } from '@/constants/weatherStatus'
 import { ApiService } from '@/services/ApiService'
 import {
